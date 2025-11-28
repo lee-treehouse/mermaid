@@ -99,18 +99,16 @@ gantt
 
     <pre id="diagram4" class="mermaid">
 gantt
-    title crawler live verification (30s response timeout) but crawler is fast enough 
+    title crawler live verification (30s response timeout) happy path 
     dateFormat HH:mm:ss
     tickInterval 10minute
     axisFormat %H:%M
 
     section timeline
 30 second response_timeout :done, response_promise, 07:00:00, 30s
-verification needed published, EB shenanigans, crawler request message in crawler SQS :trigger_verification, 07:00:00, 1s
-crawler pulls from SQS :crawler_sqs, after trigger_verification, 1s
+crawler pulls from SQS :crawler_sqs, 07:00:00, 1s
 crawler does its acvp thing in 15 seconds:crawler_acvp, after crawler_sqs, 15s
 crawler response published :crawler_response, after crawler_acvp, 1s
-api published verification completed :after crawler_response, 1s
 
 timeout detector (Que job) has no work to do :done, timeout_detector, after response_promise, 0.5s
 
@@ -121,15 +119,14 @@ timeout detector (Que job) has no work to do :done, timeout_detector, after resp
 
     <pre id="diagram4" class="mermaid">
 gantt
-    title crawler live verification (30s response timeout) but crawler is too slow  (rollbar NO) FIXABLE by async verification (5 min timeout)
+    title crawler live verification (30s response timeout) unhappy path BUT no crawler rollbar
     dateFormat HH:mm:ss
     tickInterval 10minute
     axisFormat %H:%M
 
     section timeline
 30 second response_timeout :done, response_promise, 07:00:00, 30s
-verification needed published, EB shenanigans, message in crawler SQS :trigger_verification, 07:00:00, 1s
-crawler pulls from SQS :crawler_sqs, after trigger_verification, 1s
+crawler pulls from SQS :crawler_sqs, 07:00:00, 1s
 crawler does its acvp thing in 35 seconds:crawler_acvp, after crawler_sqs, 35s
 crawler response published :crawler_response, after crawler_acvp, 1s
 
@@ -143,15 +140,14 @@ timeout detector (Que job) publishes verification completed :crit, timeout_detec
 
     <pre id="diagram4" class="mermaid">
 gantt
-    title crawler live verification (30s response timeout) but crawler is even slower (rollbar YES)
+    title crawler live verification (30s response timeout) unhappy path with crawler rollbar
     dateFormat HH:mm:ss
     tickInterval 10minute
     axisFormat %H:%M
 
     section timeline
 30 second response_timeout :done, response_promise, 07:00:00, 30s
-verification needed published, EB shenanigans, message in crawler SQS :trigger_verification, 07:00:00, 1s
-crawler pulls from SQS :crawler_sqs, after trigger_verification, 1s
+crawler pulls from SQS :crawler_sqs, 07:00:00, 1s
 crawler timeout :done, crawler_timeout, after crawler_sqs, 60s
 crawler tries to acvp but doesn't finish :crawler_acvp, after crawler_sqs, 60s
 crawler timeout detector :crit,crawler_timeout_detector, after crawler_timeout, 0.5s
