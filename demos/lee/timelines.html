@@ -21,6 +21,15 @@
     </style>
   </head>
   <body>
+    <pre>
+I am showing all non relevant durations as being the same value. 
+My next idea would be to grey out those durations and perhaps have no label, to show their irrelevance. 
+I should be able to take inspiration from the stuff I did formatting delays previously.
+
+Additionally the next thing I need to know how to do is plot using the end time rather than the start time of a task
+</pre
+    >
+
     <pre id="diagram2" class="mermaid">
 ---
 displayMode: compact
@@ -79,6 +88,78 @@ gantt
 5m0s :foo14, 09:10:00, 300s
 2m30s :foo15, 09:20:00, 150s
 2m30s :foo16, 09:30:00, 150s
+        </pre
+    >
+
+    <hr />
+
+    <pre>Can we start with higher level, less detail</pre>
+
+    <pre>We'll need to understand idempotency to make sense of this</pre>
+
+    <pre id="diagram4" class="mermaid">
+gantt
+    title crawler live verification (30s response timeout) but crawler is fast enough 
+    dateFormat HH:mm:ss
+    tickInterval 10minute
+    axisFormat %H:%M
+
+    section timeline
+30 second response_timeout :done, response_promise, 07:00:00, 30s
+verification needed published, EB shenanigans, crawler request message in crawler SQS :trigger_verification, 07:00:00, 1s
+crawler pulls from SQS :crawler_sqs, after trigger_verification, 1s
+crawler does its acvp thing in 15 seconds:crawler_acvp, after crawler_sqs, 15s
+crawler response published :crawler_response, after crawler_acvp, 1s
+api published verification completed :after crawler_response, 1s
+
+timeout detector (Que job) has no work to do :done, timeout_detector, after response_promise, 0.5s
+
+        </pre
+    >
+
+    <hr />
+
+    <pre id="diagram4" class="mermaid">
+gantt
+    title crawler live verification (30s response timeout) but crawler is too slow  (rollbar NO) FIXABLE by async verification (5 min timeout)
+    dateFormat HH:mm:ss
+    tickInterval 10minute
+    axisFormat %H:%M
+
+    section timeline
+30 second response_timeout :done, response_promise, 07:00:00, 30s
+verification needed published, EB shenanigans, message in crawler SQS :trigger_verification, 07:00:00, 1s
+crawler pulls from SQS :crawler_sqs, after trigger_verification, 1s
+crawler does its acvp thing in 35 seconds:crawler_acvp, after crawler_sqs, 35s
+crawler response published :crawler_response, after crawler_acvp, 1s
+
+
+timeout detector (Que job) publishes verification completed :crit, timeout_detector, after response_promise, 0.5s
+
+        </pre
+    >
+
+    <hr />
+
+    <pre id="diagram4" class="mermaid">
+gantt
+    title crawler live verification (30s response timeout) but crawler is even slower (rollbar YES)
+    dateFormat HH:mm:ss
+    tickInterval 10minute
+    axisFormat %H:%M
+
+    section timeline
+30 second response_timeout :done, response_promise, 07:00:00, 30s
+verification needed published, EB shenanigans, message in crawler SQS :trigger_verification, 07:00:00, 1s
+crawler pulls from SQS :crawler_sqs, after trigger_verification, 1s
+crawler timeout :done, crawler_timeout, after crawler_sqs, 60s
+crawler tries to acvp but doesn't finish :crawler_acvp, after crawler_sqs, 60s
+crawler timeout detector :crit,crawler_timeout_detector, after crawler_timeout, 0.5s
+crawler response published :crawler_response, after crawler_acvp, 1s
+
+
+timeout detector (Que job) publishes verification completed :crit, timeout_detector, after response_promise, 0.5s
+
         </pre
     >
 
