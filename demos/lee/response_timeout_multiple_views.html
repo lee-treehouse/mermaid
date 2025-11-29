@@ -93,15 +93,10 @@ gantt
     section crawler
     wrap subsequent activity in 60s timeout :done, crawler_timeout, 07:00:00, 60s
     interact with site and parse response in 35 seconds:crawler_acvp, 07:00:00, 35s
-    publish crawler response :crawler_response, after crawler_acvp, 0.5s
-
-
-
-
 
 
     section Traffic Controller<br/>Inbound
-    response_promise already settled, do nothing :done, settle_promise, after crawler_response, 0.5s
+    response_promise already settled, do nothing :done, settle_promise, after crawler_acvp, 0.5s
 
     
     section Timeout Detector<br/>Que Job
@@ -126,6 +121,71 @@ gantt
     wrap subsequent activity in 60s timeout :done, crawler_timeout, after crawler_sqs, 60s
     interact with site and parse response in 35 seconds:crawler_acvp, after crawler_sqs, 35s
     publish crawler response :crawler_response, after crawler_acvp, 0.5s
+
+
+
+
+
+
+    section Traffic Controller<br/>Inbound
+    response_promise already settled, do nothing :done, settle_promise, after crawler_response, 0.5s
+
+    
+    section Timeout Detector<br/>Que Job
+    settle response_promise with timeout :crit, timeout_detector, after response_promise, 0.5s
+
+        </pre>
+
+    <h2>
+      crawler live verification (30s response timeout) unhappy path with crawler side error (visible
+      rollbar)
+    </h2>
+    <h3>Less detail</h3>
+
+    <pre id="diagram4" class="mermaid">
+gantt
+    dateFormat HH:mm:ss
+    axisFormat %H:%M:%S
+    tickInterval 30second
+
+
+    section Workflow
+    create response promise with 30 second timeout value :done, response_promise, 07:00:00, 30s
+
+    section crawler
+    wrap subsequent activity in 60s timeout :done, crawler_timeout, 07:00:00, 60s
+    interact with site and parse response does not complete :crawler_acvp, 07:00:00, 60s
+
+    crawler timeout detector :crit,crawler_timeout_detector, after crawler_timeout, 0.5s
+
+    section Traffic Controller<br/>Inbound
+    response_promise already settled, do nothing :done, settle_promise, after crawler_timeout_detector, 0.5s
+
+    
+    section Timeout Detector<br/>Que Job
+    settle response_promise with timeout :crit, timeout_detector, after response_promise, 0.5s
+
+        </pre>
+
+    <h3>More detail</h3>
+    <pre id="diagram4" class="mermaid">
+gantt
+    dateFormat HH:mm:ss
+    axisFormat %H:%M:%S
+    tickInterval 30second
+
+
+    section Workflow
+    create response promise with 30 second timeout value :done, response_promise, 07:00:00, 30s
+    trigger verification :trigger_verification, 07:00:00, 0.5s
+
+    section crawler
+    pull crawler request from SQS :crawler_sqs, after trigger_verification, 0.5s
+    wrap subsequent activity in 60s timeout :done, crawler_timeout, after crawler_sqs, 60s
+    interact with site and parse response does not complete :crawler_acvp, after crawler_sqs, 60s
+
+    crawler timeout detector :crit,crawler_timeout_detector, after crawler_timeout, 0.5s
+    publish crawler response :crawler_response, after crawler_timeout_detector, 0.5s
 
 
 
