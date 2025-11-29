@@ -21,16 +21,18 @@
     </style>
   </head>
   <body>
-    <pre>
-I am showing all non relevant durations as being the same value. 
-My next idea would be to grey out those durations and perhaps have no label, to show their irrelevance. 
-I should be able to take inspiration from the stuff I did formatting delays previously.
+    <h2>CheckEncryptedElementsOrphansWorker setting off IOPS warning after new model added</h2>
 
-Additionally the next thing I need to know how to do is plot using the end time rather than the start time of a task
+    <pre>
+Note: showing all non relevant durations as having the same duration 2m30s - really they're quite variable but mostly fast.
 </pre
     >
 
-    <h2>When each job completes faster than 10 minutes, everything is fine</h2>
+    <h3>When each job completes faster than 10 minutes, everything is fine</h3>
+    <a
+      href="https://app.datadoghq.com/apm/resource/certsy-api%2Fsidekiq/sidekiq.job/7ec2731e6ade54e3?dependencyMap.showNetworkMetrics=false&env=prod&fromUser=false&graphType=waterfall&groupMapByOperation=null&primaryTags=&shouldShowLegend=true&spanViewType=databases&summary=qson%3A%28data%3A%28visible%3A%21t%2Cchanges%3A%28%29%2Cerrors%3A%28selected%3Acount%29%2Chits%3A%28selected%3Acount%29%2Clatency%3A%28selected%3Adistribution%2Cslot%3A%28agg%3A95%29%2Cdistribution%3A%28maxPercentile%3A%21100%2CisLogScale%3A%21f%29%2CshowTraceOutliers%3A%21t%29%2Csublayer%3A%28slot%3A%28layers%3AserviceAndInferred%29%2Cselected%3Apercentage%29%2ClagMetrics%3A%28selectedMetric%3A%21s%2CselectedGroupBy%3A%21s%29%29%2Cversion%3A%211%29&traceQuery=&start=1762252320000&end=1762338720000&paused=true#errors"
+      >5 November (and consistent prior)</a
+    >
 
     <pre id="diagram2" class="mermaid">
 ---
@@ -53,15 +55,23 @@ gantt
 2m30s :done, foo9, 08:20:00, 150s
 2m30s :done, foo10, 08:30:00, 150s
 2m30s :done, foo11, 08:40:00, 150s
-9m58s :foo12, 08:50:00, 598s
-5m0s :foo13, 09:00:00, 300s
+9m18s :foo12, 08:50:00, 568s
+5m44s :foo13, 09:00:00, 344s
 2m30s :done, foo14, 09:10:00, 150s
 2m30s :done, foo15, 09:20:00, 150s
 2m30s :done, foo16, 09:30:00, 150s
     </pre>
 
-    <h2>When a job pushes over 10 minutes, it overlaps with another job</h2>
-    <h3>the job takes significantly longer and we observe IOPS warning</h3>
+    <h3>Extra model is added. Now expensive job starts 10 minutes later, when DB is doing more</h3>
+    <h4>
+      expensive job (EE for our biggest table operations_log_credential_submission_related_actions)
+      takes significantly longer and we observe IOPS warning
+    </h4>
+
+    <a
+      href="https://app.datadoghq.com/apm/resource/certsy-api%2Fsidekiq/sidekiq.job/7ec2731e6ade54e3?dependencyMap.showNetworkMetrics=false&env=prod&fromUser=false&graphType=waterfall&groupMapByOperation=null&primaryTags=&shouldShowLegend=true&spanViewType=databases&summary=qson%3A%28data%3A%28visible%3A%21t%2Cchanges%3A%28%29%2Cerrors%3A%28selected%3Acount%29%2Chits%3A%28selected%3Acount%29%2Clatency%3A%28selected%3Adistribution%2Cslot%3A%28agg%3A95%29%2Cdistribution%3A%28maxPercentile%3A%21100%2CisLogScale%3A%21f%29%2CshowTraceOutliers%3A%21t%29%2Csublayer%3A%28slot%3A%28layers%3AserviceAndInferred%29%2Cselected%3Apercentage%29%2ClagMetrics%3A%28selectedMetric%3A%21s%2CselectedGroupBy%3A%21s%29%29%2Cversion%3A%211%29&traceQuery=&start=1762338720000&end=1762425120000&paused=true#errors"
+      >6 November (and consistent after)</a
+    >
 
     <pre id="diagram3" class="mermaid">
 ---
@@ -85,13 +95,55 @@ gantt
 2m30s :done, foo10, 08:30:00, 150s
 2m30s :done, foo11, 08:40:00, 150s
 2m30s :done, foo12, 08:50:00, 150s
-15m12s :crit, foo13, 09:00:00, 912s
-5m0s :foo14, 09:10:00, 300s
-IOPS Warning :crit, iopswarning, 09:14:59, 30s
-2m30s :done, foo15, 09:20:00, 150s
+15m32s :crit, foo13, 09:00:00, 932s
+5m48s :foo14, 09:10:00, 348s
+IOPS Warning :crit, iopswarning, 09:17:11, 30s
+. :done, foo15, 09:20:00, 150s
 2m30s :done, foo16, 09:30:00, 150s
         </pre
     >
+
+    <h3>Experiment with bringing whole shebang 10 mins earlier to see effect on expensive job</h3>
+    <h4>expensive job returns to more typical duration, subsequent job is a bit slower</h4>
+
+    <a
+      href="https://app.datadoghq.com/apm/resource/certsy-api%2Fsidekiq/sidekiq.job/7ec2731e6ade54e3?dependencyMap.showNetworkMetrics=false&env=prod&fromUser=false&graphType=waterfall&groupMapByOperation=null&primaryTags=&shouldShowLegend=true&spanViewType=databases&summary=qson%3A%28data%3A%28visible%3A%21t%2Cchanges%3A%28%29%2Cerrors%3A%28selected%3Acount%29%2Chits%3A%28selected%3Acount%29%2Clatency%3A%28selected%3Adistribution%2Cslot%3A%28agg%3A95%29%2Cdistribution%3A%28maxPercentile%3A%21100%2CisLogScale%3A%21f%29%2CshowTraceOutliers%3A%21t%29%2Csublayer%3A%28slot%3A%28layers%3AserviceAndInferred%29%2Cselected%3Apercentage%29%2ClagMetrics%3A%28selectedMetric%3A%21s%2CselectedGroupBy%3A%21s%29%29%2Cversion%3A%211%29&traceQuery=&start=1764153120000&end=1764239520000&paused=true#errors"
+      >27 November</a
+    >
+
+    <pre>
+  Some data is missing from datadog and we had to find duration of expensive job in cloudwatch logs
+</pre
+    >
+
+    <pre id="diagram4" class="mermaid">
+---
+displayMode: compact
+---
+gantt
+    dateFormat HH:mm:ss
+    tickInterval 10minute
+    axisFormat %H:%M
+
+    section timeline
+2m30s :done, foo1, 06:50:00, 150s
+2m30s :done, foo1, 07:00:00, 150s
+2m30s :done, foo2, 07:10:00, 150s
+2m30s :done, foo3, 07:20:00, 150s
+2m30s :done, foo4, 07:30:00, 150s
+2m30s :done, foo5, 07:40:00, 150s
+2m30s :done, foo6, 07:50:00, 150s
+2m30s :done, foo7, 08:00:00, 150s
+2m30s :done, foo8, 08:10:00, 150s
+2m30s :done, foo9, 08:20:00, 150s
+2m30s :done, foo10, 08:30:00, 150s
+2m30s :done, foo11, 08:40:00, 150s
+9m37s :foo12, 08:50:00, 577s
+6m23s :foo13, 09:00:00, 383s
+2m30s :done, foo14, 09:10:00, 150s
+2m30s :done, foo15, 09:20:00, 150s
+2m30s :done, foo16, 09:30:00, 150s
+    </pre>
 
     <script type="module">
       import mermaid from '/mermaid.esm.mjs';
