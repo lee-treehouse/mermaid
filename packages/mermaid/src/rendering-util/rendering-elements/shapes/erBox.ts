@@ -268,13 +268,15 @@ export async function erBox<T extends SVGGraphicsElement>(parent: D3Selection<T>
   // Name line
   let roughLine = rc.line(x, nameBBox.height + y, w + x, nameBBox.height + y, options);
   shapeSvg.insert(() => roughLine).attr('class', 'divider');
-  
+
   // First line
-  roughLine = rc.line(maxTypeWidth + x, nameBBox.height + y, maxTypeWidth + x, h + y, options);
-  shapeSvg.insert(() => roughLine).attr('class', 'divider');
-  
+  if (namePresent || typePresent) {
+    roughLine = rc.line(maxTypeWidth + x, nameBBox.height + y, maxTypeWidth + x, h + y, options);
+    shapeSvg.insert(() => roughLine).attr('class', 'divider');
+  }
+
   // Second line
-  if (keysPresent) {
+  if (keysPresent && namePresent && typePresent) {
     roughLine = rc.line(
       maxTypeWidth + maxNameWidth + x,
       nameBBox.height + y,
@@ -284,9 +286,9 @@ export async function erBox<T extends SVGGraphicsElement>(parent: D3Selection<T>
     );
     shapeSvg.insert(() => roughLine).attr('class', 'divider');
   }
-  
+
   // Third line
-  if (commentPresent) {
+  if (commentPresent && (namePresent || typePresent)) {
     roughLine = rc.line(
       maxTypeWidth + maxNameWidth + maxKeysWidth + x,
       nameBBox.height + y,
