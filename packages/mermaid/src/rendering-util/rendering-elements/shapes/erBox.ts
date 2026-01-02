@@ -95,7 +95,10 @@ export async function erBox<T extends SVGGraphicsElement>(parent: D3Selection<T>
   let maxKeysWidth = 0;
   let maxCommentWidth = 0;
   let keysPresent = true;
+  let namePresent = true;
+  let typePresent = true;
   let commentPresent = true;
+
   for (const attribute of entityNode.attributes) {
     const typeBBox = await addText(
       shapeSvg,
@@ -146,6 +149,16 @@ export async function erBox<T extends SVGGraphicsElement>(parent: D3Selection<T>
   }
   let totalWidthSections = 4;
 
+  if (maxTypeWidth <= PADDING) {
+    typePresent = false;
+    maxTypeWidth = 0;
+    totalWidthSections--;
+  }
+  if (maxNameWidth <= PADDING) {
+    namePresent = false;
+    maxNameWidth = 0;
+    totalWidthSections--;
+  }
   if (maxKeysWidth <= PADDING) {
     keysPresent = false;
     maxKeysWidth = 0;
@@ -255,9 +268,11 @@ export async function erBox<T extends SVGGraphicsElement>(parent: D3Selection<T>
   // Name line
   let roughLine = rc.line(x, nameBBox.height + y, w + x, nameBBox.height + y, options);
   shapeSvg.insert(() => roughLine).attr('class', 'divider');
+  
   // First line
   roughLine = rc.line(maxTypeWidth + x, nameBBox.height + y, maxTypeWidth + x, h + y, options);
   shapeSvg.insert(() => roughLine).attr('class', 'divider');
+  
   // Second line
   if (keysPresent) {
     roughLine = rc.line(
@@ -269,6 +284,7 @@ export async function erBox<T extends SVGGraphicsElement>(parent: D3Selection<T>
     );
     shapeSvg.insert(() => roughLine).attr('class', 'divider');
   }
+  
   // Third line
   if (commentPresent) {
     roughLine = rc.line(

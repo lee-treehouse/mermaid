@@ -96,6 +96,12 @@ export class ErDB implements DiagramDB {
       if (!attribs[i].comment) {
         attribs[i].comment = '';
       }
+      if (attribs[i].type=='LEAVE_BLANK') {
+        attribs[i].type = '';
+      }
+      if (attribs[i].name=='LEAVE_BLANK') {
+        attribs[i].name = '';
+      }
       entity.attributes.push(attribs[i]);
       log.debug('Added attribute ', attribs[i].name);
     }
