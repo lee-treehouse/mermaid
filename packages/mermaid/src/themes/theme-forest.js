@@ -232,6 +232,31 @@ class Theme {
     this.pieOuterStrokeColor = this.pieOuterStrokeColor || 'black';
     this.pieOpacity = this.pieOpacity || '0.7';
 
+    /* milestone */
+    this.milestone1 = this.milestone1 || this.primaryColor;
+    this.milestone2 = this.milestone2 || this.secondaryColor;
+    this.milestone3 = this.milestone3 || this.tertiaryColor;
+    this.milestone4 = this.milestone4 || adjust(this.primaryColor, { l: -30 });
+    this.milestone5 = this.milestone5 || adjust(this.secondaryColor, { l: -30 });
+    this.milestone6 = this.milestone6 || adjust(this.tertiaryColor, { h: +40, l: -40 });
+    this.milestone7 = this.milestone7 || adjust(this.primaryColor, { h: +60, l: -10 });
+    this.milestone8 = this.milestone8 || adjust(this.primaryColor, { h: -60, l: -10 });
+    this.milestone9 = this.milestone9 || adjust(this.primaryColor, { h: 120, l: 0 });
+    this.milestone10 = this.milestone10 || adjust(this.primaryColor, { h: +60, l: -50 });
+    this.milestone11 = this.milestone11 || adjust(this.primaryColor, { h: -60, l: -50 });
+    this.milestone12 = this.milestone12 || adjust(this.primaryColor, { h: 120, l: -50 });
+    this.milestoneTitleTextSize = this.milestoneTitleTextSize || '25px';
+    this.milestoneTitleTextColor = this.milestoneTitleTextColor || this.taskTextDarkColor;
+    this.milestoneSectionTextSize = this.milestoneSectionTextSize || '17px';
+    this.milestoneSectionTextColor = this.milestoneSectionTextColor || this.textColor;
+    this.milestoneLegendTextSize = this.milestoneLegendTextSize || '17px';
+    this.milestoneLegendTextColor = this.milestoneLegendTextColor || this.taskTextDarkColor;
+    this.milestoneStrokeColor = this.milestoneStrokeColor || 'black';
+    this.milestoneStrokeWidth = this.milestoneStrokeWidth || '2px';
+    this.milestoneOuterStrokeWidth = this.milestoneOuterStrokeWidth || '2px';
+    this.milestoneOuterStrokeColor = this.milestoneOuterStrokeColor || 'black';
+    this.milestoneOpacity = this.milestoneOpacity || '0.7';
+
     /* quadrant-graph */
     this.quadrant1Fill = this.quadrant1Fill || this.primaryColor;
     this.quadrant2Fill = this.quadrant2Fill || adjust(this.primaryColor, { r: 5, g: 5, b: 5 });

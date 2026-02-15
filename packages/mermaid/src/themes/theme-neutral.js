@@ -263,6 +263,24 @@ class Theme {
     this.pieOuterStrokeColor = this.pieOuterStrokeColor || 'black';
     this.pieOpacity = this.pieOpacity || '0.7';
 
+    // /* milestone */
+    /* Milestone diagram */
+    for (let i = 0; i < this.THEME_COLOR_LIMIT; i++) {
+      this['milestone' + i] = this['cScale' + i];
+    }
+    this.milestone12 = this.milestone0;
+    this.milestoneTitleTextSize = this.milestoneTitleTextSize || '25px';
+    this.milestoneTitleTextColor = this.milestoneTitleTextColor || this.taskTextDarkColor;
+    this.milestoneSectionTextSize = this.milestoneSectionTextSize || '17px';
+    this.milestoneSectionTextColor = this.milestoneSectionTextColor || this.textColor;
+    this.milestoneLegendTextSize = this.milestoneLegendTextSize || '17px';
+    this.milestoneLegendTextColor = this.milestoneLegendTextColor || this.taskTextDarkColor;
+    this.milestoneStrokeColor = this.milestoneStrokeColor || 'black';
+    this.milestoneStrokeWidth = this.milestoneStrokeWidth || '2px';
+    this.milestoneOuterStrokeWidth = this.milestoneOuterStrokeWidth || '2px';
+    this.milestoneOuterStrokeColor = this.milestoneOuterStrokeColor || 'black';
+    this.milestoneOpacity = this.milestoneOpacity || '0.7';
+
     /* quadrant-graph */
     this.quadrant1Fill = this.quadrant1Fill || this.primaryColor;
     this.quadrant2Fill = this.quadrant2Fill || adjust(this.primaryColor, { r: 5, g: 5, b: 5 });

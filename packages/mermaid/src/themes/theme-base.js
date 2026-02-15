@@ -305,6 +305,31 @@ class Theme {
       (this.darkMode ? darken(this.secondaryColor, 30) : this.secondaryColor);
     this.relationLabelColor = this.relationLabelColor || this.actorTextColor;
 
+    /* milestone */
+    this.milestone1 = this.milestone1 || this.primaryColor;
+    this.milestone2 = this.milestone2 || this.secondaryColor;
+    this.milestone3 = this.milestone3 || this.tertiaryColor;
+    this.milestone4 = this.milestone4 || adjust(this.primaryColor, { l: -10 });
+    this.milestone5 = this.milestone5 || adjust(this.secondaryColor, { l: -10 });
+    this.milestone6 = this.milestone6 || adjust(this.tertiaryColor, { l: -10 });
+    this.milestone7 = this.milestone7 || adjust(this.primaryColor, { h: +60, l: -10 });
+    this.milestone8 = this.milestone8 || adjust(this.primaryColor, { h: -60, l: -10 });
+    this.milestone9 = this.milestone9 || adjust(this.primaryColor, { h: 120, l: 0 });
+    this.milestone10 = this.milestone10 || adjust(this.primaryColor, { h: +60, l: -20 });
+    this.milestone11 = this.milestone11 || adjust(this.primaryColor, { h: -60, l: -20 });
+    this.milestone12 = this.milestone12 || adjust(this.primaryColor, { h: 120, l: -10 });
+    this.milestoneTitleTextSize = this.milestoneTitleTextSize || '25px';
+    this.milestoneTitleTextColor = this.milestoneTitleTextColor || this.taskTextDarkColor;
+    this.milestoneSectionTextSize = this.milestoneSectionTextSize || '17px';
+    this.milestoneSectionTextColor = this.milestoneSectionTextColor || this.textColor;
+    this.milestoneLegendTextSize = this.milestoneLegendTextSize || '17px';
+    this.milestoneLegendTextColor = this.milestoneLegendTextColor || this.taskTextDarkColor;
+    this.milestoneStrokeColor = this.milestoneStrokeColor || 'black';
+    this.milestoneStrokeWidth = this.milestoneStrokeWidth || '2px';
+    this.milestoneOuterStrokeWidth = this.milestoneOuterStrokeWidth || '2px';
+    this.milestoneOuterStrokeColor = this.milestoneOuterStrokeColor || 'black';
+    this.milestoneOpacity = this.milestoneOpacity || '0.7';
+
     /* git */
     this.git0 = this.git0 || this.primaryColor;
     this.git1 = this.git1 || this.secondaryColor;

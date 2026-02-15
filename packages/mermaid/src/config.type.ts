@@ -217,6 +217,7 @@ export interface MermaidConfig {
   packet?: PacketDiagramConfig;
   block?: BlockDiagramConfig;
   radar?: RadarDiagramConfig;
+  milestone?: MilestoneDiagramConfig;
   dompurifyConfig?: DOMPurifyConfiguration;
   wrap?: boolean;
   fontSize?: number;
@@ -1634,6 +1635,17 @@ export interface RadarDiagramConfig extends BaseDiagramConfig {
    * The tension factor for the Catmull-Rom spline conversion to cubic Bézier curves.
    */
   curveTension?: number;
+}
+/**
+ * This interface was referenced by `MermaidConfig`'s JSON-Schema
+ * via the `definition` "MilestoneDiagramConfig".
+ */
+export interface MilestoneDiagramConfig extends BaseDiagramConfig {
+  /**
+   * Axial position of slice's label from zero at the center to 1 at the outside edges.
+   *
+   */
+  textPosition?: number;
 }
 /**
  * This interface was referenced by `MermaidConfig`'s JSON-Schema

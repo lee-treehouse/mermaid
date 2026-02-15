@@ -23,6 +23,7 @@ import kanban from '../diagrams/kanban/detector.js';
 import sankey from '../diagrams/sankey/sankeyDetector.js';
 import { packet } from '../diagrams/packet/detector.js';
 import { radar } from '../diagrams/radar/detector.js';
+import { milestone } from '../diagrams/milestone/detector.js';
 import block from '../diagrams/block/blockDetector.js';
 import architecture from '../diagrams/architecture/architectureDetector.js';
 import { registerLazyLoadedDiagrams } from './detectType.js';
@@ -101,6 +102,7 @@ export const addDiagrams = () => {
     xychart,
     block,
     radar,
-    treemap
+    treemap,
+    milestone
   );
 };

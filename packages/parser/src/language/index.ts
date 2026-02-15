@@ -13,6 +13,7 @@ export {
   Commit,
   Merge,
   Statement,
+  Milestone,
   isInfo,
   isPacket,
   isPacketBlock,
@@ -24,6 +25,7 @@ export {
   isBranch,
   isCommit,
   isMerge,
+  isMilestone
 } from './generated/ast.js';
 
 export {
@@ -35,7 +37,8 @@ export {
   GitGraphGeneratedModule,
   RadarGeneratedModule,
   TreemapGeneratedModule,
-} from './generated/module.js';
+  MilestoneGeneratedModule,
+} from './generated/module.js'; 
 
 export * from './gitGraph/index.js';
 export * from './common/index.js';

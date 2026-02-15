@@ -276,6 +276,11 @@ const config: RequiredDeep<MermaidConfig> = {
     labelFontSize: 14,
     valueFormat: ',',
   },
+  milestone: {
+    ...defaultConfigJson.milestone,
+    useWidth: 984,
+  },
+
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

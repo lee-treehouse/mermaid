@@ -13,6 +13,8 @@ import type {
   PacketServices,
   GitGraph,
   GitGraphServices,
+  Milestone,
+  MilestoneServices,
 } from '../src/language/index.js';
 import {
   createArchitectureServices,
@@ -21,6 +23,7 @@ import {
   createRadarServices,
   createPacketServices,
   createGitGraphServices,
+  createMilestoneServices,
 } from '../src/language/index.js';
 
 const consoleMock = vi.spyOn(console, 'log').mockImplementation(() => undefined);
@@ -105,3 +108,14 @@ export function createGitGraphTestServices() {
   return { services: gitGraphServices, parse };
 }
 export const gitGraphParse = createGitGraphTestServices().parse;
+
+const milestoneServices: GitGraphServices = createMilestoneServices().Milestone;
+const milestoneParser: LangiumParser = milestoneServices.parser.LangiumParser;
+export function createMilestoneTestServices() {
+  const parse = (input: string) => {
+    return milestoneParser.parse<Milestone>(input);
+  };
+
+  return { services: milestoneServices, parse };
+}
+export const milestoneParse = createMilestoneTestServices().parse;
